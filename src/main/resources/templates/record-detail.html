@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面试记录详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        h2 {
+            color: #333;
+            font-size: 28px;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .detail-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        .detail-item.full-width {
+            grid-column: 1 / -1;
+        }
+        .detail-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .detail-value {
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .badge-info {
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+        .questions-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .questions-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .questions-list {
+            list-style: none;
+            counter-reset: question-counter;
+        }
+        .questions-list li {
+            position: relative;
+            padding: 15px 15px 15px 50px;
+            margin-bottom: 12px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .questions-list li::before {
+            counter-increment: question-counter;
+            content: counter(question-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-edit {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #212529;
+        }
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+        }
+        .btn-delete {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+        }
+        .remark-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            color: #555;
+            line-height: 1.6;
+            min-height: 60px;
+        }
+        .empty-remark {
+            color: #999;
+            font-style: italic;
+        }
+        @media (max-width: 600px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 24px;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>面试记录详情</h2>
+        <a th:href="@{/records}" class="btn-back">← 返回列表</a>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <div class="detail-label">面试时间</div>
+            <div class="detail-value" th:text="${#temporals.format(record.interviewTime, 'yyyy-MM-dd HH:mm')}"></div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">公司名称</div>
+            <div class="detail-value" th:text="${record.companyName}"></div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">面试轮次</div>
+            <div class="detail-value">
+                <span class="badge badge-info" th:text="'第 ' + ${record.interviewRound} + ' 轮'"></span>
+            </div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">公司类型</div>
+            <div class="detail-value" th:text="${record.companyType == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">薪资范围</div>
+            <div class="detail-value" th:text="${record.salaryRange}"></div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">公司地址</div>
+            <div class="detail-value" th:text="${record.companyAddress}"></div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">面试结果</div>
+            <div class="detail-value">
+                <span th:class="${record.passed == null ? 'badge badge-info' : (record.passed ? 'badge badge-success' : 'badge badge-danger')}"
+                      th:text="${record.passed == null ? '⚪ 结果待定' : (record.passed ? '✓ 通过' : '✗ 未通过')}"></span>
+            </div>
+        </div>
+        <div class="detail-item full-width">
+            <div class="detail-label">备注</div>
+            <div class="remark-box" th:text="${record.remark} ?: '暂无备注'"
+                 th:class="${record.remark} ? '' : 'empty-remark'"></div>
+        </div>
+    </div>
+
+    <div class="questions-section">
+        <div class="questions-title">面试问题</div>
+        <ul class="questions-list">
+            <li th:each="q : ${record.questions}" th:utext="${#strings.replace(q.questionContent, '\n', '<br>')}"></li>
+        </ul>
+    </div>
+
+    <div class="actions">
+        <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-edit">✎ 编辑记录</a>
+        <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;" onsubmit="return confirm('确定要删除这条面试记录吗？删除后不可恢复');">
+            <button type="submit" class="btn btn-delete">🗑 删除记录</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

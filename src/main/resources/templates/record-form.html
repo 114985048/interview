@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${recordForm.interviewId == null ? '新增面试记录' : '编辑面试记录'}"></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        h2 {
+            color: #333;
+            font-size: 28px;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        .required::after {
+            content: ' *';
+            color: #dc3545;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .error {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .error::before {
+            content: '⚠️';
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .hint {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 6px;
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2 th:text="${recordForm.interviewId == null ? '新增面试记录' : '编辑面试记录'}"></h2>
+        <a th:href="@{/records}" class="btn-back">← 返回列表</a>
+    </div>
+
+    <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></p>
+
+    <form th:action="${recordForm.interviewId == null} ? @{/records} : @{/records/{id}(id=${recordForm.interviewId})}" method="post" th:object="${recordForm}">
+        <div class="form-row">
+            <div class="form-group">
+                <label class="required">面试时间</label>
+                <input type="datetime-local" th:field="*{interviewTime}">
+                <span class="error" th:errors="*{interviewTime}"></span>
+            </div>
+            <div class="form-group">
+                <label class="required">公司名称</label>
+                <input type="text" th:field="*{companyName}" placeholder="请输入公司名称">
+                <span class="error" th:errors="*{companyName}"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="required">面试轮次</label>
+                <input type="number" min="1" th:field="*{interviewRound}" placeholder="请输入面试轮次">
+                <span class="error" th:errors="*{interviewRound}"></span>
+            </div>
+            <div class="form-group">
+                <label class="required">公司类型</label>
+                <select th:field="*{companyType}">
+                    <option value="">请选择公司类型</option>
+                    <option th:each="type : ${companyTypes}" th:value="${type}" th:text="${type == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></option>
+                </select>
+                <span class="error" th:errors="*{companyType}"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="required">薪资范围</label>
+                <input type="text" th:field="*{salaryRange}" placeholder="例如 15k-20k/月">
+                <span class="error" th:errors="*{salaryRange}"></span>
+            </div>
+            <div class="form-group">
+                <label class="required">公司地址</label>
+                <input type="text" th:field="*{companyAddress}" placeholder="请输入公司地址">
+                <span class="error" th:errors="*{companyAddress}"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="required">面试结果</label>
+            <select th:field="*{passed}">
+                <option value="">请选择面试结果</option>
+                <option value="true">通过</option>
+                <option value="false">未通过</option>
+            </select>
+            <span class="error" th:errors="*{passed}"></span>
+        </div>
+
+        <div class="form-group">
+            <label>备注</label>
+            <textarea th:field="*{remark}" placeholder="请输入备注信息（可选）"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="required">面试问题</label>
+            <textarea th:field="*{questionText}" placeholder="请输入面试问题，使用 // 分隔多个问题"></textarea>
+            <p class="hint">💡 提示：使用 // 分隔多个问题</p>
+        </div>
+
+        <button type="submit" class="btn-submit">✓ 提交保存</button>
+    </form>
+</div>
+</body>
+</html>
