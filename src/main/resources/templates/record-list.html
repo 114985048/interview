@@ -201,29 +201,11 @@
             <label>公司名称:
                 <input type="text" th:field="*{companyName}" placeholder="输入公司名称">
             </label>
-            <label>开始时间:
-                <input type="datetime-local" th:field="*{startTime}">
-            </label>
-            <label>结束时间:
-                <input type="datetime-local" th:field="*{endTime}">
-            </label>
             <label>是否通过:
                 <select th:field="*{passed}">
                     <option value="">全部</option>
                     <option value="true">通过</option>
                     <option value="false">未通过</option>
-                </select>
-            </label>
-        </div>
-
-        <div class="form-row">
-            <label>面试轮次:
-                <input type="number" th:field="*{interviewRound}" min="1" placeholder="轮次">
-            </label>
-            <label>公司类型:
-                <select th:field="*{companyType}">
-                    <option value="">全部</option>
-                    <option th:each="type : ${companyTypes}" th:value="${type}" th:text="${type == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></option>
                 </select>
             </label>
             <label>薪资范围:

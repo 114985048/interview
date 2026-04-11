@@ -42,7 +42,6 @@ public class InterviewRecordController {
         User currentUser = getCurrentUser();
         List<InterviewRecord> records = interviewRecordService.search(searchForm, currentUser);
         model.addAttribute("records", records);
-        model.addAttribute("companyTypes", CompanyType.values());
         return "record-list";
     }
 

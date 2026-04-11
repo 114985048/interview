@@ -45,20 +45,8 @@ public class InterviewRecordService {
             if (form.getCompanyName() != null && !form.getCompanyName().trim().isEmpty()) {
                 predicates.add(cb.like(cb.lower(root.get("companyName")), "%" + form.getCompanyName().trim().toLowerCase() + "%"));
             }
-            if (form.getStartTime() != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("interviewTime"), form.getStartTime()));
-            }
-            if (form.getEndTime() != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("interviewTime"), form.getEndTime()));
-            }
             if (form.getPassed() != null) {
                 predicates.add(cb.equal(root.get("passed"), form.getPassed()));
-            }
-            if (form.getInterviewRound() != null) {
-                predicates.add(cb.equal(root.get("interviewRound"), form.getInterviewRound()));
-            }
-            if (form.getCompanyType() != null) {
-                predicates.add(cb.equal(root.get("companyType"), form.getCompanyType()));
             }
             if (form.getSalaryRange() != null && !form.getSalaryRange().trim().isEmpty()) {
                 predicates.add(cb.like(cb.lower(root.get("salaryRange")), "%" + form.getSalaryRange().trim().toLowerCase() + "%"));
