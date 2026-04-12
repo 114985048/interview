@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>面试记录管理 - 列表</title>
+    <title th:text="${isEdit} ? '编辑日记' : '新建日记'">日记</title>
     <style>
         * {
             margin: 0;
@@ -217,15 +217,24 @@
             padding: 30px;
             overflow-x: auto;
         }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
         h2 {
             color: #333;
             font-size: 28px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #667eea;
         }
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
@@ -243,188 +252,90 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
-        .search-form {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
         }
-        .form-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-            align-items: center;
+        .btn-secondary:hover {
+            background: #5a6268;
         }
-        .form-row:last-child {
-            margin-bottom: 0;
+        .form-group {
+            margin-bottom: 20px;
         }
         label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
             color: #555;
-        }
-        input, select {
-            padding: 8px 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
             font-size: 14px;
-            transition: border-color 0.3s;
         }
-        input:focus, select:focus {
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-        .msg-success {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #28a745;
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .emoji-select {
+            font-size: 16px;
         }
         .msg-error {
             background: #f8d7da;
             color: #721c24;
             padding: 12px 20px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-left: 4px solid #dc3545;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-            color: #555;
-        }
-        tbody tr:hover {
-            background: #f8f9fa;
-        }
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 6px;
-        }
-        .btn-info {
-            background: #17a2b8;
-            color: white;
-        }
-        .btn-warning {
-            background: #ffc107;
-            color: #212529;
-        }
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-        .badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .badge-info {
-            background: #e3f2fd;
-            color: #0d47a1;
-        }
-
-        /* 移动端卡片视图 */
-        .record-cards {
-            display: none;
-        }
-        .record-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border: 2px solid transparent;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-        .record-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-            border-color: #667eea;
-        }
-        .record-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .record-card-company {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-        }
-        .record-card-time {
+        .char-count {
+            text-align: right;
             font-size: 12px;
             color: #888;
+            margin-top: 5px;
         }
-        .record-card-meta {
+        .form-actions {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
         }
-        .record-card-remark {
-            font-size: 13px;
+        .tips-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .tips-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .tips-card p {
             color: #666;
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-        .record-card-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         /* 移动端响应式 */
@@ -482,30 +393,19 @@
             h2 {
                 font-size: 22px;
             }
-            .search-form .form-row {
+            .page-header {
                 flex-direction: column;
-                gap: 10px;
+                align-items: flex-start;
             }
-            .search-form label {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .form-actions .btn {
                 width: 100%;
-            }
-            .search-form input, .search-form select {
-                width: 100%;
-            }
-            table {
-                display: none;
-            }
-            .record-cards {
-                display: block;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .record-card {
-                padding: 15px;
-            }
-            .record-card-company {
-                font-size: 16px;
+                justify-content: center;
             }
         }
     </style>
@@ -524,7 +424,7 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item">
-                <a th:href="@{/records}" class="nav-link active">
+                <a th:href="@{/records}" class="nav-link">
                     <span class="nav-icon">💼</span>
                     <span class="nav-text">面试记录</span>
                 </a>
@@ -536,7 +436,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/diary}" class="nav-link">
+                <a th:href="@{/diary}" class="nav-link active">
                     <span class="nav-icon">📔</span>
                     <span class="nav-text">我的日记</span>
                 </a>
@@ -556,119 +456,67 @@
 
     <!-- 主内容区 -->
     <div class="container">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #667eea;">
-            <h2>面试记录管理</h2>
+        <div class="page-header">
+            <h2 th:text="${isEdit} ? '📝 编辑日记' : '📝 新建日记'">日记</h2>
+            <a th:href="@{/diary}" class="btn btn-secondary">← 返回列表</a>
         </div>
 
-    <p th:if="${successMessage}" th:text="${successMessage}" class="msg-success"></p>
-    <p th:if="${errorMessage}" th:text="${errorMessage}" class="msg-error"></p>
-
-    <a th:href="@{/records/new}" class="btn btn-primary">+ 新增面试记录</a>
-
-    <form th:action="@{/records}" method="get" th:object="${searchForm}" class="search-form">
-        <div class="form-row">
-            <label>公司名称:
-                <input type="text" th:field="*{companyName}" placeholder="输入公司名称">
-            </label>
-            <label>是否通过:
-                <select th:field="*{passed}">
-                    <option value="">全部</option>
-                    <option value="true">通过</option>
-                    <option value="false">未通过</option>
-                </select>
-            </label>
-            <label>薪资范围:
-                <input type="text" th:field="*{salaryRange}" placeholder="如 15k-20k">
-            </label>
-            <label>公司地址:
-                <input type="text" th:field="*{companyAddress}" placeholder="输入地址">
-            </label>
+        <div class="tips-card">
+            <h4>💡 写日记小贴士</h4>
+            <p>记录今天的天气、心情和发生的事情。日记是时间的礼物，多年后回看会是一段珍贵的回忆。</p>
         </div>
 
-        <div class="form-row">
-            <label>排序字段:
-                <select th:field="*{sortBy}">
-                    <option value="interviewTime">面试时间</option>
-                    <option value="companyName">公司名称</option>
-                    <option value="salaryRange">薪资范围</option>
-                </select>
-            </label>
-            <label>排序方向:
-                <select th:field="*{direction}">
-                    <option value="desc">倒序</option>
-                    <option value="asc">正序</option>
-                </select>
-            </label>
-            <button type="submit" class="btn btn-primary">🔍 查询</button>
-        </div>
-    </form>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="msg-error"></p>
 
-    <table>
-        <thead>
-        <tr>
-            <th>时间</th>
-            <th>公司名称</th>
-            <th>公司类型</th>
-            <th>面试轮次</th>
-            <th>薪资范围</th>
-            <th>面试结果</th>
-            <th>备注</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(records)}">
-            <td colspan="8" class="empty-state">暂无相关面试记录，请调整查询条件。</td>
-        </tr>
-        <tr th:each="record : ${records}">
-            <td th:text="${#temporals.format(record.interviewTime, 'yyyy-MM-dd HH:mm')}"></td>
-            <td th:text="${record.companyName}"></td>
-            <td th:text="${record.companyType == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></td>
-            <td th:text="${record.interviewRound}"></td>
-            <td th:text="${record.salaryRange}"></td>
-            <td>
-                <span th:class="${record.passed == null ? 'badge badge-info' : (record.passed ? 'badge badge-success' : 'badge badge-danger')}"
-                      th:text="${record.passed == null ? '结果待定' : (record.passed ? '通过' : '未通过')}"></span>
-            </td>
-            <td th:text="${record.remark ?: '无'}"></td>
-            <td class="actions">
-                <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-info">详情</a>
-                <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-warning">编辑</a>
-                <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;" onsubmit="return confirm('确定要删除这条面试记录吗？删除后不可恢复');">
-                    <button type="submit" class="btn btn-small btn-danger">删除</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <form th:action="@{/diary/save}" th:object="${diaryForm}" method="post">
+            <input type="hidden" th:field="*{diaryId}">
 
-    <!-- 移动端卡片视图 -->
-    <div class="record-cards">
-        <div th:if="${#lists.isEmpty(records)}" class="empty-state">
-            暂无相关面试记录，请调整查询条件。
-        </div>
-        <div th:each="record : ${records}" class="record-card">
-            <div class="record-card-header">
-                <div class="record-card-company" th:text="${record.companyName}"></div>
-                <div class="record-card-time" th:text="'📅 ' + ${#temporals.format(record.interviewTime, 'yyyy-MM-dd HH:mm')}"></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="diaryDate">📅 日期 *</label>
+                    <input type="date" id="diaryDate" th:field="*{diaryDate}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="weather">🌤️ 天气</label>
+                    <select id="weather" th:field="*{weather}" class="emoji-select">
+                        <option value="">请选择天气</option>
+                        <option th:each="w : ${weatherOptions}" th:value="${w}" th:text="${w}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mood">😊 心情</label>
+                    <select id="mood" th:field="*{mood}" class="emoji-select">
+                        <option value="">请选择心情</option>
+                        <option th:each="m : ${moodOptions}" th:value="${m}" th:text="${m}"></option>
+                    </select>
+                </div>
             </div>
-            <div class="record-card-meta">
-                <span class="badge badge-info" th:text="${record.companyType == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></span>
-                <span class="badge badge-info" th:text="'第' + ${record.interviewRound} + '轮'"></span>
-                <span class="badge badge-info" th:if="${record.salaryRange}" th:text="'💰 ' + ${record.salaryRange}"></span>
-                <span th:class="${record.passed == null ? 'badge badge-info' : (record.passed ? 'badge badge-success' : 'badge badge-danger')}"
-                      th:text="${record.passed == null ? '结果待定' : (record.passed ? '✅ 通过' : '❌ 未通过')}"></span>
+
+            <div class="form-group">
+                <label for="title">📝 标题</label>
+                <input type="text" id="title" th:field="*{title}" placeholder="给今天起个标题吧..." maxlength="100">
+                <div class="char-count"><span id="titleCount">0</span>/100</div>
             </div>
-            <div class="record-card-remark" th:if="${record.remark}" th:text="${record.remark}"></div>
-            <div class="record-card-actions">
-                <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-info">详情</a>
-                <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-warning">编辑</a>
-                <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;" onsubmit="return confirm('确定要删除这条面试记录吗？删除后不可恢复');">
-                    <button type="submit" class="btn btn-small btn-danger">删除</button>
-                </form>
+
+            <div class="form-group">
+                <label for="content">📖 今天发生了什么？</label>
+                <textarea id="content" th:field="*{content}" placeholder="记录下今天发生的事情、遇到的人、看到的风景..." maxlength="2000"></textarea>
+                <div class="char-count"><span id="contentCount">0</span>/2000</div>
             </div>
-        </div>
-    </div>
+
+            <div class="form-group">
+                <label for="todaySummary">💭 今日总结 / 感悟</label>
+                <textarea id="todaySummary" th:field="*{todaySummary}" placeholder="对今天的总结，或者有什么感悟..." maxlength="500" style="min-height: 80px;"></textarea>
+                <div class="char-count"><span id="summaryCount">0</span>/500</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 保存日记</button>
+                <a th:href="@{/diary}" class="btn btn-secondary">取消</a>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -676,17 +524,31 @@
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');
-        // 保存状态到本地存储
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
     }
 
-    // 页面加载时恢复侧边栏状态
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
         }
+
+        // 字符计数
+        function updateCount(inputId, countId) {
+            const input = document.getElementById(inputId);
+            const count = document.getElementById(countId);
+            if (input && count) {
+                count.textContent = input.value.length;
+                input.addEventListener('input', function() {
+                    count.textContent = this.value.length;
+                });
+            }
+        }
+
+        updateCount('title', 'titleCount');
+        updateCount('content', 'contentCount');
+        updateCount('todaySummary', 'summaryCount');
     });
 </script>
 </body>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit} ? '编辑学习记录' : '新增学习记录'">学习记录表单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .main-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            min-height: calc(100vh - 40px);
+        }
+        .sidebar {
+            width: 220px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
+        }
+        .sidebar-title {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .sidebar-subtitle {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .nav-menu {
+            list-style: none;
+            flex: 1;
+        }
+        .nav-item {
+            margin: 5px 0;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .nav-link:hover {
+            background: #f8f9fa;
+            color: #11998e;
+        }
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(17, 153, 142, 0.1) 0%, transparent 100%);
+            color: #11998e;
+            border-left-color: #11998e;
+        }
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .container {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+        h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #11998e;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .msg-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+        }
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .progress-container input[type="range"] {
+            flex: 1;
+        }
+        .progress-value {
+            min-width: 50px;
+            text-align: center;
+            font-weight: 600;
+            color: #11998e;
+        }
+        @media (max-width: 768px) {
+            .form-row, .form-row-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="main-wrapper">
+    <!-- 左侧导航栏 -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">📚 管理系统</div>
+            <div class="sidebar-subtitle">个人成长记录平台</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a th:href="@{/records}" class="nav-link">
+                    <span class="nav-icon">💼</span>
+                    <span>面试记录</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/study}" class="nav-link active">
+                    <span class="nav-icon">📖</span>
+                    <span>学习记录</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/diary}" class="nav-link">
+                    <span class="nav-icon">📔</span>
+                    <span>我的日记</span>
+                </a>
+            </li>
+        </ul>
+        <div style="padding: 15px 20px; border-top: 2px solid #f0f0f0;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <span style="font-size: 20px;">👤</span>
+                <span style="font-weight: 600; color: #333; font-size: 14px;" sec:authentication="name"></span>
+            </div>
+            <a th:href="@{/logout}" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #666; text-decoration: none; border-radius: 6px; font-size: 13px; text-align: center; transition: all 0.3s ease;">退出登录</a>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <div class="container">
+        <h2 th:text="${isEdit} ? '编辑学习记录' : '新增学习记录'">学习记录表单</h2>
+
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="msg-error"></p>
+
+        <form th:action="@{/study/save}" th:object="${form}" method="post">
+            <input type="hidden" th:field="*{studyId}">
+
+            <div class="form-group">
+                <label for="subject" class="required">学习主题</label>
+                <input type="text" id="subject" th:field="*{subject}" placeholder="请输入学习主题，如：Spring Boot 深入学习">
+                <span class="error" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="studyType" class="required">学习类型</label>
+                    <select id="studyType" th:field="*{studyType}">
+                        <option value="">请选择</option>
+                        <option value="TECH">技术学习</option>
+                        <option value="ALGORITHM">算法练习</option>
+                        <option value="PROJECT">项目实战</option>
+                        <option value="READING">阅读笔记</option>
+                        <option value="OTHER">其他</option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('studyType')}" th:errors="*{studyType}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="difficulty" class="required">难度等级</label>
+                    <select id="difficulty" th:field="*{difficulty}">
+                        <option value="">请选择</option>
+                        <option value="EASY">简单</option>
+                        <option value="MEDIUM">中等</option>
+                        <option value="HARD">困难</option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('difficulty')}" th:errors="*{difficulty}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="masteryLevel" class="required">掌握程度</label>
+                    <select id="masteryLevel" th:field="*{masteryLevel}">
+                        <option value="">请选择</option>
+                        <option value="BEGINNER">初学</option>
+                        <option value="FAMILIAR">熟悉</option>
+                        <option value="PROFICIENT">熟练</option>
+                        <option value="MASTER">精通</option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('masteryLevel')}" th:errors="*{masteryLevel}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="duration" class="required">学习时长（分钟）</label>
+                    <input type="number" id="duration" th:field="*{duration}" min="1" max="1440" placeholder="如：60">
+                    <span class="error" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="studyDate" class="required">学习时间</label>
+                    <input type="datetime-local" id="studyDate" th:field="*{studyDate}">
+                    <span class="error" th:if="${#fields.hasErrors('studyDate')}" th:errors="*{studyDate}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="progress" class="required">学习进度</label>
+                    <div class="progress-container">
+                        <input type="range" id="progress" th:field="*{progress}" min="0" max="100" oninput="updateProgressValue(this.value)">
+                        <span class="progress-value" id="progressValue">0%</span>
+                    </div>
+                    <span class="error" th:if="${#fields.hasErrors('progress')}" th:errors="*{progress}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">学习内容</label>
+                <textarea id="content" th:field="*{content}" placeholder="详细记录学习的内容、心得体会..."></textarea>
+                <span class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="keyPoints">重点笔记</label>
+                    <textarea id="keyPoints" th:field="*{keyPoints}" placeholder="记录重点知识点、关键概念..."></textarea>
+                    <span class="error" th:if="${#fields.hasErrors('keyPoints')}" th:errors="*{keyPoints}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="questions">疑问记录</label>
+                    <textarea id="questions" th:field="*{questions}" placeholder="记录不理解的问题、需要后续研究的内容..."></textarea>
+                    <span class="error" th:if="${#fields.hasErrors('questions')}" th:errors="*{questions}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" th:text="${isEdit} ? '保存修改' : '添加记录'">提交</button>
+                <a th:href="@{/study}" class="btn btn-secondary">返回列表</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    function updateProgressValue(value) {
+        document.getElementById('progressValue').textContent = value + '%';
+    }
+
+    // 初始化进度值显示
+    document.addEventListener('DOMContentLoaded', function() {
+        var progressInput = document.getElementById('progress');
+        if (progressInput) {
+            updateProgressValue(progressInput.value);
+        }
+    });
+</script>
+</body>
+</html>

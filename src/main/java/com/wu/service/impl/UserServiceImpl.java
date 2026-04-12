@@ -38,10 +38,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("用户不存在");
-        }
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
@@ -52,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(String username, String password) {
         // 检查用户名是否已存在
-        if (userRepository.findByUsername(username) != null) {
+        if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("用户名已存在");
         }
 
@@ -67,29 +65,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            System.out.println("用户不存在: " + username);
-        } else {
-            System.out.println("找到用户: " + username + ", ID: " + user.getUserId());
-        }
-        return user;
+        return userRepository.findByUsername(username).orElse(null);
     }
 
     @Override
     public void createAdminUser() {
         // 检查是否已存在管理员用户
-        User admin = userRepository.findByUsername("admin");
-        if (admin == null) {
+        if (!userRepository.findByUsername("admin").isPresent()) {
             // 创建管理员用户
-            admin = new User();
+            User admin = new User();
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setAdmin(true);
             User savedAdmin = userRepository.save(admin);
             System.out.println("管理员用户创建成功，ID: " + savedAdmin.getUserId());
         } else {
-            System.out.println("管理员用户已存在，ID: " + admin.getUserId());
+            System.out.println("管理员用户已存在");
         }
     }
 }

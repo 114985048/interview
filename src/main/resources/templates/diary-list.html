@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>面试记录管理 - 列表</title>
+    <title>我的日记 - 管理系统</title>
     <style>
         * {
             margin: 0;
@@ -217,15 +217,24 @@
             padding: 30px;
             overflow-x: auto;
         }
-        h2 {
-            color: #333;
-            font-size: 28px;
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 3px solid #667eea;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        h2 {
+            color: #333;
+            font-size: 28px;
         }
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
@@ -243,39 +252,25 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
-        .search-form {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
         }
-        .form-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-            align-items: center;
+        .btn-secondary:hover {
+            background: #5a6268;
         }
-        .form-row:last-child {
-            margin-bottom: 0;
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
         }
-        label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #555;
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(220, 53, 69, 0.4);
         }
-        input, select {
-            padding: 8px 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
         }
         .msg-success {
             background: #d4edda;
@@ -293,138 +288,173 @@
             margin-bottom: 15px;
             border-left: 4px solid #dc3545;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-            color: #555;
-        }
-        tbody tr:hover {
-            background: #f8f9fa;
-        }
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-        .actions {
+        .search-bar {
             display: flex;
-            gap: 8px;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 6px;
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
         }
-        .btn-info {
-            background: #17a2b8;
-            color: white;
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
         }
-        .btn-warning {
-            background: #ffc107;
-            color: #212529;
+        .diary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-        .badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .badge-info {
-            background: #e3f2fd;
-            color: #0d47a1;
-        }
-
-        /* 移动端卡片视图 */
-        .record-cards {
-            display: none;
-        }
-        .record-card {
+        .diary-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             border-radius: 16px;
             padding: 20px;
-            margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border: 2px solid transparent;
-            border-left: 4px solid #667eea;
             transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
-        .record-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        .diary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             border-color: #667eea;
         }
-        .record-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
+        .diary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
         }
-        .record-card-company {
+        .diary-date {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .diary-title {
             font-size: 18px;
             font-weight: 600;
             color: #333;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        .record-card-time {
-            font-size: 12px;
-            color: #888;
-        }
-        .record-card-meta {
+        .diary-meta {
             display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
         }
-        .record-card-remark {
-            font-size: 13px;
+        .diary-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .diary-mood {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        .diary-preview {
+            font-size: 14px;
             color: #666;
-            margin-bottom: 12px;
-            line-height: 1.5;
+            line-height: 1.6;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 15px;
         }
-        .record-card-actions {
+        .diary-actions {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            grid-column: 1 / -1;
+        }
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .pagination a, .pagination span {
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .pagination a {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 1px solid #e0e0e0;
+        }
+        .pagination a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .pagination .current {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .pagination .disabled {
+            color: #ccc;
+            cursor: not-allowed;
         }
 
         /* 移动端响应式 */
@@ -482,30 +512,36 @@
             h2 {
                 font-size: 22px;
             }
-            .search-form .form-row {
+            .page-header {
                 flex-direction: column;
-                gap: 10px;
+                align-items: flex-start;
             }
-            .search-form label {
+            .diary-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-bar {
+                flex-direction: column;
+            }
+            .search-input {
                 width: 100%;
             }
-            .search-form input, .search-form select {
-                width: 100%;
-            }
-            table {
-                display: none;
-            }
-            .record-cards {
-                display: block;
+            .stats-bar {
+                justify-content: center;
             }
         }
 
         @media (max-width: 480px) {
-            .record-card {
+            .diary-card {
                 padding: 15px;
             }
-            .record-card-company {
+            .diary-title {
                 font-size: 16px;
+            }
+            .stat-item {
+                padding: 10px 15px;
+            }
+            .stat-number {
+                font-size: 20px;
             }
         }
     </style>
@@ -524,7 +560,7 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item">
-                <a th:href="@{/records}" class="nav-link active">
+                <a th:href="@{/records}" class="nav-link">
                     <span class="nav-icon">💼</span>
                     <span class="nav-text">面试记录</span>
                 </a>
@@ -536,7 +572,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/diary}" class="nav-link">
+                <a th:href="@{/diary}" class="nav-link active">
                     <span class="nav-icon">📔</span>
                     <span class="nav-text">我的日记</span>
                 </a>
@@ -556,119 +592,75 @@
 
     <!-- 主内容区 -->
     <div class="container">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #667eea;">
-            <h2>面试记录管理</h2>
-        </div>
-
-    <p th:if="${successMessage}" th:text="${successMessage}" class="msg-success"></p>
-    <p th:if="${errorMessage}" th:text="${errorMessage}" class="msg-error"></p>
-
-    <a th:href="@{/records/new}" class="btn btn-primary">+ 新增面试记录</a>
-
-    <form th:action="@{/records}" method="get" th:object="${searchForm}" class="search-form">
-        <div class="form-row">
-            <label>公司名称:
-                <input type="text" th:field="*{companyName}" placeholder="输入公司名称">
-            </label>
-            <label>是否通过:
-                <select th:field="*{passed}">
-                    <option value="">全部</option>
-                    <option value="true">通过</option>
-                    <option value="false">未通过</option>
-                </select>
-            </label>
-            <label>薪资范围:
-                <input type="text" th:field="*{salaryRange}" placeholder="如 15k-20k">
-            </label>
-            <label>公司地址:
-                <input type="text" th:field="*{companyAddress}" placeholder="输入地址">
-            </label>
-        </div>
-
-        <div class="form-row">
-            <label>排序字段:
-                <select th:field="*{sortBy}">
-                    <option value="interviewTime">面试时间</option>
-                    <option value="companyName">公司名称</option>
-                    <option value="salaryRange">薪资范围</option>
-                </select>
-            </label>
-            <label>排序方向:
-                <select th:field="*{direction}">
-                    <option value="desc">倒序</option>
-                    <option value="asc">正序</option>
-                </select>
-            </label>
-            <button type="submit" class="btn btn-primary">🔍 查询</button>
-        </div>
-    </form>
-
-    <table>
-        <thead>
-        <tr>
-            <th>时间</th>
-            <th>公司名称</th>
-            <th>公司类型</th>
-            <th>面试轮次</th>
-            <th>薪资范围</th>
-            <th>面试结果</th>
-            <th>备注</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(records)}">
-            <td colspan="8" class="empty-state">暂无相关面试记录，请调整查询条件。</td>
-        </tr>
-        <tr th:each="record : ${records}">
-            <td th:text="${#temporals.format(record.interviewTime, 'yyyy-MM-dd HH:mm')}"></td>
-            <td th:text="${record.companyName}"></td>
-            <td th:text="${record.companyType == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></td>
-            <td th:text="${record.interviewRound}"></td>
-            <td th:text="${record.salaryRange}"></td>
-            <td>
-                <span th:class="${record.passed == null ? 'badge badge-info' : (record.passed ? 'badge badge-success' : 'badge badge-danger')}"
-                      th:text="${record.passed == null ? '结果待定' : (record.passed ? '通过' : '未通过')}"></span>
-            </td>
-            <td th:text="${record.remark ?: '无'}"></td>
-            <td class="actions">
-                <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-info">详情</a>
-                <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-warning">编辑</a>
-                <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;" onsubmit="return confirm('确定要删除这条面试记录吗？删除后不可恢复');">
-                    <button type="submit" class="btn btn-small btn-danger">删除</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <!-- 移动端卡片视图 -->
-    <div class="record-cards">
-        <div th:if="${#lists.isEmpty(records)}" class="empty-state">
-            暂无相关面试记录，请调整查询条件。
-        </div>
-        <div th:each="record : ${records}" class="record-card">
-            <div class="record-card-header">
-                <div class="record-card-company" th:text="${record.companyName}"></div>
-                <div class="record-card-time" th:text="'📅 ' + ${#temporals.format(record.interviewTime, 'yyyy-MM-dd HH:mm')}"></div>
-            </div>
-            <div class="record-card-meta">
-                <span class="badge badge-info" th:text="${record.companyType == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></span>
-                <span class="badge badge-info" th:text="'第' + ${record.interviewRound} + '轮'"></span>
-                <span class="badge badge-info" th:if="${record.salaryRange}" th:text="'💰 ' + ${record.salaryRange}"></span>
-                <span th:class="${record.passed == null ? 'badge badge-info' : (record.passed ? 'badge badge-success' : 'badge badge-danger')}"
-                      th:text="${record.passed == null ? '结果待定' : (record.passed ? '✅ 通过' : '❌ 未通过')}"></span>
-            </div>
-            <div class="record-card-remark" th:if="${record.remark}" th:text="${record.remark}"></div>
-            <div class="record-card-actions">
-                <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-info">详情</a>
-                <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-warning">编辑</a>
-                <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;" onsubmit="return confirm('确定要删除这条面试记录吗？删除后不可恢复');">
-                    <button type="submit" class="btn btn-small btn-danger">删除</button>
-                </form>
+        <div class="page-header">
+            <h2 th:text="${isAdmin} ? '📔 所有日记' : '📔 我的日记'">📔 我的日记</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a th:href="@{/diary/new}" class="btn btn-primary">+ 新建日记</a>
             </div>
         </div>
-    </div>
+
+        <p th:if="${successMessage}" th:text="${successMessage}" class="msg-success"></p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="msg-error"></p>
+
+        <!-- 统计信息 -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number" th:text="${totalCount}">0</span>
+                <span class="stat-label">篇日记</span>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <form th:action="@{/diary/search}" method="get" class="search-bar">
+            <input type="text" name="keyword" class="search-input" placeholder="搜索日记内容..."
+                   th:value="${keyword}" required>
+            <button type="submit" class="btn btn-primary">🔍 搜索</button>
+            <a th:href="@{/diary}" class="btn btn-secondary" th:if="${searchMode}">重置</a>
+        </form>
+
+        <!-- 日记卡片网格 -->
+        <div class="diary-grid">
+            <div th:if="${#lists.isEmpty(diaries)}" class="empty-state">
+                <div class="empty-state-icon">📔</div>
+                <h3>还没有日记</h3>
+                <p>开始记录你的生活点滴吧~</p>
+            </div>
+
+            <div th:each="diary : ${diaries}" class="diary-card" th:onclick="'location.href=\'' + @{/diary/{id}(id=${diary.diaryId})} + '\''">
+                <div class="diary-date">
+                    📅 <span th:text="${#dates.format(diary.diaryDate, 'yyyy年MM月dd日')}"></span>
+                    <span th:if="${#dates.format(diary.diaryDate, 'yyyy-MM-dd') == #dates.format(#dates.createNow(), 'yyyy-MM-dd')}" style="color: #667eea; font-weight: 600;">(今天)</span>
+                    <span th:if="${isAdmin}" style="color: #764ba2; font-weight: 500; margin-left: 8px;">👤 <span th:text="${userNameMap != null ? userNameMap[diary.userId] : ''}"></span></span>
+                </div>
+                <div class="diary-title" th:text="${diary.title} ?: '无标题'"></div>
+                <div class="diary-meta">
+                    <span class="diary-badge" th:if="${diary.weather}" th:text="${diary.weather}"></span>
+                    <span class="diary-badge diary-mood" th:if="${diary.mood}" th:text="${diary.mood}"></span>
+                </div>
+                <div class="diary-preview" th:text="${diary.content} ?: '暂无内容'"></div>
+                <div class="diary-actions" onclick="event.stopPropagation();">
+                    <a th:href="@{/diary/{id}/edit(id=${diary.diaryId})}" class="btn btn-small btn-primary">编辑</a>
+                    <form th:action="@{/diary/{id}/delete(id=${diary.diaryId})}" method="post" style="display:inline;"
+                          onsubmit="return confirm('确定要删除这篇日记吗？');">
+                        <button type="submit" class="btn btn-small btn-danger">删除</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分页 -->
+        <div class="pagination" th:if="${diaryPage != null && diaryPage.totalPages > 1}">
+            <a th:if="${diaryPage.hasPrevious()}" th:href="@{/diary(page=${diaryPage.number - 1})}">上一页</a>
+            <span th:if="${!diaryPage.hasPrevious()}" class="disabled">上一页</span>
+
+            <span th:each="i : ${#numbers.sequence(0, diaryPage.totalPages - 1)}">
+                <span th:if="${i == diaryPage.number}" class="current" th:text="${i + 1}"></span>
+                <a th:if="${i != diaryPage.number}" th:href="@{/diary(page=${i})}" th:text="${i + 1}"></a>
+            </span>
+
+            <a th:if="${diaryPage.hasNext()}" th:href="@{/diary(page=${diaryPage.number + 1})}">下一页</a>
+            <span th:if="${!diaryPage.hasNext()}" class="disabled">下一页</span>
+        </div>
     </div>
 </div>
 
@@ -676,11 +668,9 @@
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');
-        // 保存状态到本地存储
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
     }
 
-    // 页面加载时恢复侧边栏状态
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
