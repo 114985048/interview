@@ -1,47 +1,53 @@
 package com.wu.web.dto;
 
 import com.wu.model.CompanyType;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import com.wu.model.InterviewResult;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * 面试记录表单DTO
+ */
 public class InterviewRecordForm {
 
     private Long interviewId;
 
-    @NotNull(message = "面试时间不能为空")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime interviewTime;
-
     @NotBlank(message = "公司名称不能为空")
     private String companyName;
-
-    @NotNull(message = "面试轮次不能为空")
-    @Min(value = 1, message = "面试轮次必须为正整数")
-    private Integer interviewRound;
 
     @NotNull(message = "公司类型不能为空")
     private CompanyType companyType;
 
-    @NotBlank(message = "薪资范围不能为空")
+    private String position;
+
     private String salaryRange;
 
-    @NotBlank(message = "公司地址不能为空")
     private String companyAddress;
 
+    @NotNull(message = "面试日期不能为空")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime interviewDate;
+
     @NotNull(message = "面试结果不能为空")
-    private Boolean passed;
+    private InterviewResult interviewResult;
 
-    private String remark;
+    @Min(value = 1, message = "面试轮次至少为1")
+    private Integer interviewRound;
 
-    private List<String> questions = new ArrayList<>();
-    private String questionText;
+    @Min(value = 1, message = "难度最低为1")
+    @Max(value = 5, message = "难度最高为5")
+    private Integer difficulty;
+
+    private String interviewContent;
+
+    private String summary;
+
+    private String questions;
 
     public Long getInterviewId() {
         return interviewId;
@@ -49,14 +55,6 @@ public class InterviewRecordForm {
 
     public void setInterviewId(Long interviewId) {
         this.interviewId = interviewId;
-    }
-
-    public LocalDateTime getInterviewTime() {
-        return interviewTime;
-    }
-
-    public void setInterviewTime(LocalDateTime interviewTime) {
-        this.interviewTime = interviewTime;
     }
 
     public String getCompanyName() {
@@ -67,20 +65,20 @@ public class InterviewRecordForm {
         this.companyName = companyName;
     }
 
-    public Integer getInterviewRound() {
-        return interviewRound;
-    }
-
-    public void setInterviewRound(Integer interviewRound) {
-        this.interviewRound = interviewRound;
-    }
-
     public CompanyType getCompanyType() {
         return companyType;
     }
 
     public void setCompanyType(CompanyType companyType) {
         this.companyType = companyType;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getSalaryRange() {
@@ -99,35 +97,59 @@ public class InterviewRecordForm {
         this.companyAddress = companyAddress;
     }
 
-    public Boolean getPassed() {
-        return passed;
+    public LocalDateTime getInterviewDate() {
+        return interviewDate;
     }
 
-    public void setPassed(Boolean passed) {
-        this.passed = passed;
+    public void setInterviewDate(LocalDateTime interviewDate) {
+        this.interviewDate = interviewDate;
     }
 
-    public String getRemark() {
-        return remark;
+    public InterviewResult getInterviewResult() {
+        return interviewResult;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setInterviewResult(InterviewResult interviewResult) {
+        this.interviewResult = interviewResult;
     }
 
-    public List<String> getQuestions() {
+    public Integer getInterviewRound() {
+        return interviewRound;
+    }
+
+    public void setInterviewRound(Integer interviewRound) {
+        this.interviewRound = interviewRound;
+    }
+
+    public Integer getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Integer difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getInterviewContent() {
+        return interviewContent;
+    }
+
+    public void setInterviewContent(String interviewContent) {
+        this.interviewContent = interviewContent;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<String> questions) {
+    public void setQuestions(String questions) {
         this.questions = questions;
-    }
-
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
     }
 }

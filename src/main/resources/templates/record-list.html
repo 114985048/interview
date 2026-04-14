@@ -12,7 +12,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -55,7 +55,7 @@
             right: -12px;
             width: 24px;
             height: 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -64,13 +64,13 @@
             justify-content: center;
             color: white;
             font-size: 12px;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
             transition: all 0.3s ease;
             z-index: 10;
         }
         .toggle-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.6);
         }
         .sidebar.collapsed .toggle-btn {
             transform: rotate(180deg);
@@ -86,7 +86,7 @@
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -133,7 +133,7 @@
             top: 0;
             height: 100%;
             width: 0;
-            background: linear-gradient(90deg, rgba(102, 126, 234, 0.3) 0%, transparent 100%);
+            background: linear-gradient(90deg, rgba(255, 107, 107, 0.3) 0%, transparent 100%);
             transition: width 0.3s ease;
         }
         .nav-link:hover {
@@ -144,9 +144,9 @@
             width: 100%;
         }
         .nav-link.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(254, 202, 87, 0.3) 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
         .nav-icon {
             width: 24px;
@@ -177,7 +177,7 @@
         .user-avatar {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -217,15 +217,24 @@
             padding: 30px;
             overflow-x: auto;
         }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #ff6b6b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
         h2 {
             color: #333;
             font-size: 28px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #667eea;
         }
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
@@ -236,12 +245,48 @@
             font-size: 14px;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
             color: white;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(220, 53, 69, 0.4);
+        }
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        .msg-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+        }
+        .msg-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #dc3545;
         }
         .search-form {
             background: #f8f9fa;
@@ -275,139 +320,60 @@
         }
         input:focus, select:focus {
             outline: none;
-            border-color: #667eea;
-        }
-        .msg-success {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #28a745;
-        }
-        .msg-error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #dc3545;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-            color: #555;
-        }
-        tbody tr:hover {
-            background: #f8f9fa;
-        }
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 6px;
-        }
-        .btn-info {
-            background: #17a2b8;
-            color: white;
-        }
-        .btn-warning {
-            background: #ffc107;
-            color: #212529;
-        }
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-        .badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
-        }
-        .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .badge-info {
-            background: #e3f2fd;
-            color: #0d47a1;
+            border-color: #ff6b6b;
         }
 
-        /* 移动端卡片视图 */
-        .record-cards {
-            display: none;
+        /* 卡片网格布局 */
+        .record-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         .record-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             border-radius: 16px;
             padding: 20px;
-            margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border: 2px solid transparent;
-            border-left: 4px solid #667eea;
             transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
         .record-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #ff6b6b;
+        }
+        .record-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #ff6b6b 0%, #feca57 100%);
         }
         .record-card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
         }
         .record-card-company {
             font-size: 18px;
             font-weight: 600;
             color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
         }
-        .record-card-time {
+        .record-card-date {
             font-size: 12px;
             color: #888;
+            white-space: nowrap;
         }
         .record-card-meta {
             display: flex;
@@ -415,16 +381,108 @@
             gap: 8px;
             margin-bottom: 12px;
         }
-        .record-card-remark {
-            font-size: 13px;
-            color: #666;
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-type {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .badge-result-pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        .badge-result-passed {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-result-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .badge-result-gaveup {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        .badge-salary {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .badge-position {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .record-card-difficulty {
+            display: flex;
+            align-items: center;
+            gap: 5px;
             margin-bottom: 12px;
-            line-height: 1.5;
+        }
+        .difficulty-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .difficulty-stars {
+            color: #ffc107;
+        }
+        .record-card-preview {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            margin-bottom: 15px;
         }
         .record-card-actions {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            grid-column: 1 / -1;
+        }
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
         }
 
         /* 移动端响应式 */
@@ -482,6 +540,13 @@
             h2 {
                 font-size: 22px;
             }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .record-grid {
+                grid-template-columns: 1fr;
+            }
             .search-form .form-row {
                 flex-direction: column;
                 gap: 10px;
@@ -492,11 +557,8 @@
             .search-form input, .search-form select {
                 width: 100%;
             }
-            table {
-                display: none;
-            }
-            .record-cards {
-                display: block;
+            .stats-bar {
+                justify-content: center;
             }
         }
 
@@ -506,6 +568,12 @@
             }
             .record-card-company {
                 font-size: 16px;
+            }
+            .stat-item {
+                padding: 10px 15px;
+            }
+            .stat-number {
+                font-size: 20px;
             }
         }
     </style>
@@ -556,119 +624,118 @@
 
     <!-- 主内容区 -->
     <div class="container">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #667eea;">
-            <h2>面试记录管理</h2>
+        <div class="page-header">
+            <h2>💼 面试记录管理</h2>
+            <a th:href="@{/records/new}" class="btn btn-primary">+ 新增面试记录</a>
         </div>
 
-    <p th:if="${successMessage}" th:text="${successMessage}" class="msg-success"></p>
-    <p th:if="${errorMessage}" th:text="${errorMessage}" class="msg-error"></p>
+        <p th:if="${successMessage}" th:text="${successMessage}" class="msg-success"></p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="msg-error"></p>
 
-    <a th:href="@{/records/new}" class="btn btn-primary">+ 新增面试记录</a>
-
-    <form th:action="@{/records}" method="get" th:object="${searchForm}" class="search-form">
-        <div class="form-row">
-            <label>公司名称:
-                <input type="text" th:field="*{companyName}" placeholder="输入公司名称">
-            </label>
-            <label>是否通过:
-                <select th:field="*{passed}">
-                    <option value="">全部</option>
-                    <option value="true">通过</option>
-                    <option value="false">未通过</option>
-                </select>
-            </label>
-            <label>薪资范围:
-                <input type="text" th:field="*{salaryRange}" placeholder="如 15k-20k">
-            </label>
-            <label>公司地址:
-                <input type="text" th:field="*{companyAddress}" placeholder="输入地址">
-            </label>
-        </div>
-
-        <div class="form-row">
-            <label>排序字段:
-                <select th:field="*{sortBy}">
-                    <option value="interviewTime">面试时间</option>
-                    <option value="companyName">公司名称</option>
-                    <option value="salaryRange">薪资范围</option>
-                </select>
-            </label>
-            <label>排序方向:
-                <select th:field="*{direction}">
-                    <option value="desc">倒序</option>
-                    <option value="asc">正序</option>
-                </select>
-            </label>
-            <button type="submit" class="btn btn-primary">🔍 查询</button>
-        </div>
-    </form>
-
-    <table>
-        <thead>
-        <tr>
-            <th>时间</th>
-            <th>公司名称</th>
-            <th>公司类型</th>
-            <th>面试轮次</th>
-            <th>薪资范围</th>
-            <th>面试结果</th>
-            <th>备注</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(records)}">
-            <td colspan="8" class="empty-state">暂无相关面试记录，请调整查询条件。</td>
-        </tr>
-        <tr th:each="record : ${records}">
-            <td th:text="${#temporals.format(record.interviewTime, 'yyyy-MM-dd HH:mm')}"></td>
-            <td th:text="${record.companyName}"></td>
-            <td th:text="${record.companyType == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></td>
-            <td th:text="${record.interviewRound}"></td>
-            <td th:text="${record.salaryRange}"></td>
-            <td>
-                <span th:class="${record.passed == null ? 'badge badge-info' : (record.passed ? 'badge badge-success' : 'badge badge-danger')}"
-                      th:text="${record.passed == null ? '结果待定' : (record.passed ? '通过' : '未通过')}"></span>
-            </td>
-            <td th:text="${record.remark ?: '无'}"></td>
-            <td class="actions">
-                <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-info">详情</a>
-                <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-warning">编辑</a>
-                <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;" onsubmit="return confirm('确定要删除这条面试记录吗？删除后不可恢复');">
-                    <button type="submit" class="btn btn-small btn-danger">删除</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <!-- 移动端卡片视图 -->
-    <div class="record-cards">
-        <div th:if="${#lists.isEmpty(records)}" class="empty-state">
-            暂无相关面试记录，请调整查询条件。
-        </div>
-        <div th:each="record : ${records}" class="record-card">
-            <div class="record-card-header">
-                <div class="record-card-company" th:text="${record.companyName}"></div>
-                <div class="record-card-time" th:text="'📅 ' + ${#temporals.format(record.interviewTime, 'yyyy-MM-dd HH:mm')}"></div>
-            </div>
-            <div class="record-card-meta">
-                <span class="badge badge-info" th:text="${record.companyType == T(com.wu.model.CompanyType).SELF_RESEARCH ? '自研' : '外包'}"></span>
-                <span class="badge badge-info" th:text="'第' + ${record.interviewRound} + '轮'"></span>
-                <span class="badge badge-info" th:if="${record.salaryRange}" th:text="'💰 ' + ${record.salaryRange}"></span>
-                <span th:class="${record.passed == null ? 'badge badge-info' : (record.passed ? 'badge badge-success' : 'badge badge-danger')}"
-                      th:text="${record.passed == null ? '结果待定' : (record.passed ? '✅ 通过' : '❌ 未通过')}"></span>
-            </div>
-            <div class="record-card-remark" th:if="${record.remark}" th:text="${record.remark}"></div>
-            <div class="record-card-actions">
-                <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-info">详情</a>
-                <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-warning">编辑</a>
-                <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;" onsubmit="return confirm('确定要删除这条面试记录吗？删除后不可恢复');">
-                    <button type="submit" class="btn btn-small btn-danger">删除</button>
-                </form>
+        <!-- 统计信息 -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number" th:text="${#lists.size(records)}">0</span>
+                <span class="stat-label">条记录</span>
             </div>
         </div>
-    </div>
+
+        <!-- 搜索表单 -->
+        <form th:action="@{/records}" method="get" th:object="${searchForm}" class="search-form">
+            <div class="form-row">
+                <label>公司名称:
+                    <input type="text" th:field="*{companyName}" placeholder="输入公司名称">
+                </label>
+                <label>公司类型:
+                    <select th:field="*{companyType}">
+                        <option value="">全部</option>
+                        <option th:each="type : ${T(com.wu.model.CompanyType).values()}"
+                                th:value="${type}"
+                                th:text="${type.name() == 'SELF_RESEARCH' ? '自研' : '外包'}"></option>
+                    </select>
+                </label>
+                <label>面试结果:
+                    <select th:field="*{interviewResult}">
+                        <option value="">全部</option>
+                        <option th:each="result : ${T(com.wu.model.InterviewResult).values()}"
+                                th:value="${result}"
+                                th:text="${result.displayName}"></option>
+                    </select>
+                </label>
+                <label>职位:
+                    <input type="text" th:field="*{position}" placeholder="输入职位">
+                </label>
+            </div>
+            <div class="form-row">
+                <label>薪资范围:
+                    <input type="text" th:field="*{salaryRange}" placeholder="如 15k-20k">
+                </label>
+                <label>难度:
+                    <select th:field="*{difficulty}">
+                        <option value="">全部</option>
+                        <option value="1">⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                    </select>
+                </label>
+                <label>排序字段:
+                    <select th:field="*{sortBy}">
+                        <option value="interviewDate">面试日期</option>
+                        <option value="companyName">公司名称</option>
+                        <option value="salaryRange">薪资范围</option>
+                    </select>
+                </label>
+                <label>排序方向:
+                    <select th:field="*{direction}">
+                        <option value="desc">倒序</option>
+                        <option value="asc">正序</option>
+                    </select>
+                </label>
+                <button type="submit" class="btn btn-primary">🔍 查询</button>
+            </div>
+        </form>
+
+        <!-- 面试记录卡片网格 -->
+        <div class="record-grid">
+            <div th:if="${#lists.isEmpty(records)}" class="empty-state">
+                <div class="empty-state-icon">💼</div>
+                <h3>还没有面试记录</h3>
+                <p>开始记录你的面试经历吧~</p>
+            </div>
+
+            <div th:each="record : ${records}" class="record-card" th:onclick="'location.href=\'' + @{/records/{id}(id=${record.interviewId})} + '\''">
+                <div class="record-card-header">
+                    <div class="record-card-company" th:text="${record.companyName}">公司名称</div>
+                    <div class="record-card-date">
+                        📅 <span th:text="${#temporals.format(record.interviewDate, 'yyyy-MM-dd')}"></span>
+                    </div>
+                </div>
+                <div class="record-card-meta">
+                    <span class="badge badge-type" th:text="${record.companyType.name() == 'SELF_RESEARCH' ? '自研' : '外包'}"></span>
+                    <span th:class="'badge badge-result-' + ${record.interviewResult.name().toLowerCase()}"
+                          th:text="${record.interviewResult.displayName}"></span>
+                    <span class="badge badge-position" th:if="${record.position}" th:text="${record.position}"></span>
+                    <span class="badge badge-salary" th:if="${record.salaryRange}" th:text="${record.salaryRange}"></span>
+                </div>
+                <div class="record-card-difficulty" th:if="${record.difficulty}">
+                    <span class="difficulty-label">难度:</span>
+                    <span class="difficulty-stars">
+                        <span th:each="i : ${#numbers.sequence(1, record.difficulty)}">⭐</span>
+                    </span>
+                </div>
+                <div class="record-card-preview" th:text="${record.summary} ?: ${record.interviewContent} ?: '暂无内容'">预览内容</div>
+                <div class="record-card-actions" onclick="event.stopPropagation();">
+                    <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-secondary">详情</a>
+                    <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-primary">编辑</a>
+                    <form th:action="@{/records/{id}/delete(id=${record.interviewId})}" method="post" style="display:inline;"
+                          onsubmit="return confirm('确定要删除这条面试记录吗？');">
+                        <button type="submit" class="btn btn-small btn-danger">删除</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -676,11 +743,9 @@
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');
-        // 保存状态到本地存储
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
     }
 
-    // 页面加载时恢复侧边栏状态
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';

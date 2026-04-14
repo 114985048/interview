@@ -1,84 +1,89 @@
 package com.wu.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.EnumType;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import com.wu.model.User;
 
+/**
+ * 面试记录实体类 - 全新设计
+ */
 @Entity
-@Table(name = "interview_record")
+@Table(name = "interview_records")
 public class InterviewRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "interview_id")
     private Long interviewId;
 
-    @Column(nullable = false)
-    private LocalDateTime interviewTime;
-
-    @Column(nullable = false, length = 200)
-    private String companyName;
-
-    @Column(nullable = false)
-    private Integer interviewRound;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
-    private CompanyType companyType;
-
-    @Column(nullable = false, length = 100)
-    private String salaryRange;
-
-    @Column(nullable = false, length = 300)
-    private String companyAddress;
-
-    @Column
-    private Boolean passed;
-
-    @Column(columnDefinition = "TEXT")
-    private String remark;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "interviewRecord", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<InterviewQuestion> questions = new ArrayList<>();
+    @Column(name = "company_name", nullable = false, length = 200)
+    private String companyName;
 
-    @Column(length = 255)
-    private String fileName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "company_type", nullable = false)
+    private CompanyType companyType;
 
-    @Column(length = 500)
-    private String filePath;
+    @Column(name = "position", length = 100)
+    private String position;
 
-    @Column(length = 100)
-    private String contentType;
+    @Column(name = "salary_range", length = 50)
+    private String salaryRange;
 
-    @Column
-    private Long fileSize;
+    @Column(name = "company_address", length = 300)
+    private String companyAddress;
 
-    public void addQuestion(InterviewQuestion question) {
-        question.setInterviewRecord(this);
-        this.questions.add(question);
+    @Column(name = "interview_date", nullable = false)
+    private LocalDateTime interviewDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "interview_result", nullable = false)
+    private InterviewResult interviewResult;
+
+    @Column(name = "interview_round")
+    private Integer interviewRound;
+
+    @Column(name = "difficulty")
+    private Integer difficulty;
+
+    @Column(name = "interview_content", columnDefinition = "TEXT")
+    private String interviewContent;
+
+    @Column(name = "summary", columnDefinition = "TEXT")
+    private String summary;
+
+    @Column(name = "questions", columnDefinition = "TEXT")
+    private String questions;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        if (interviewDate == null) {
+            interviewDate = LocalDateTime.now();
+        }
+        if (interviewRound == null) {
+            interviewRound = 1;
+        }
+        if (difficulty == null) {
+            difficulty = 3;
+        }
     }
 
-    public void clearQuestions() {
-        this.questions.clear();
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
+    // Getters and Setters
     public Long getInterviewId() {
         return interviewId;
     }
@@ -87,12 +92,12 @@ public class InterviewRecord {
         this.interviewId = interviewId;
     }
 
-    public LocalDateTime getInterviewTime() {
-        return interviewTime;
+    public User getUser() {
+        return user;
     }
 
-    public void setInterviewTime(LocalDateTime interviewTime) {
-        this.interviewTime = interviewTime;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getCompanyName() {
@@ -103,20 +108,20 @@ public class InterviewRecord {
         this.companyName = companyName;
     }
 
-    public Integer getInterviewRound() {
-        return interviewRound;
-    }
-
-    public void setInterviewRound(Integer interviewRound) {
-        this.interviewRound = interviewRound;
-    }
-
     public CompanyType getCompanyType() {
         return companyType;
     }
 
     public void setCompanyType(CompanyType companyType) {
         this.companyType = companyType;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getSalaryRange() {
@@ -135,67 +140,75 @@ public class InterviewRecord {
         this.companyAddress = companyAddress;
     }
 
-    public Boolean getPassed() {
-        return passed;
+    public LocalDateTime getInterviewDate() {
+        return interviewDate;
     }
 
-    public void setPassed(Boolean passed) {
-        this.passed = passed;
+    public void setInterviewDate(LocalDateTime interviewDate) {
+        this.interviewDate = interviewDate;
     }
 
-    public String getRemark() {
-        return remark;
+    public InterviewResult getInterviewResult() {
+        return interviewResult;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setInterviewResult(InterviewResult interviewResult) {
+        this.interviewResult = interviewResult;
     }
 
-    public List<InterviewQuestion> getQuestions() {
+    public Integer getInterviewRound() {
+        return interviewRound;
+    }
+
+    public void setInterviewRound(Integer interviewRound) {
+        this.interviewRound = interviewRound;
+    }
+
+    public Integer getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Integer difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getInterviewContent() {
+        return interviewContent;
+    }
+
+    public void setInterviewContent(String interviewContent) {
+        this.interviewContent = interviewContent;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<InterviewQuestion> questions) {
+    public void setQuestions(String questions) {
         this.questions = questions;
     }
 
-    public String getFileName() {
-        return fileName;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public Long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(Long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
