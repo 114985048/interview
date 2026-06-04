@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>面试记录管理 - 列表</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff6b6b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="面试记录">
     <style>
         * {
             margin: 0;
@@ -321,6 +326,17 @@
         input:focus, select:focus {
             outline: none;
             border-color: #ff6b6b;
+        }
+        .search-more-btn {
+            color: #ff6b6b;
+            cursor: pointer;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .search-more-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
         }
 
         /* 卡片网格布局 */
@@ -642,7 +658,7 @@
 
         <!-- 搜索表单 -->
         <form th:action="@{/records}" method="get" th:object="${searchForm}" class="search-form">
-            <div class="form-row">
+            <div class="form-row search-row-main">
                 <label>公司名称:
                     <input type="text" th:field="*{companyName}" placeholder="输入公司名称">
                 </label>
@@ -662,11 +678,12 @@
                                 th:text="${result.displayName}"></option>
                     </select>
                 </label>
+                <label class="search-more-btn" onclick="toggleSearch()">更多条件 ▼</label>
+            </div>
+            <div class="form-row search-row-extra" style="display: none;">
                 <label>职位:
                     <input type="text" th:field="*{position}" placeholder="输入职位">
                 </label>
-            </div>
-            <div class="form-row">
                 <label>薪资范围:
                     <input type="text" th:field="*{salaryRange}" placeholder="如 15k-20k">
                 </label>
@@ -680,6 +697,8 @@
                         <option value="5">⭐⭐⭐⭐⭐</option>
                     </select>
                 </label>
+            </div>
+            <div class="form-row search-row-sort">
                 <label>排序字段:
                     <select th:field="*{sortBy}">
                         <option value="interviewDate">面试日期</option>
@@ -725,7 +744,7 @@
                         <span th:each="i : ${#numbers.sequence(1, record.difficulty)}">⭐</span>
                     </span>
                 </div>
-                <div class="record-card-preview" th:text="${record.summary} ?: ${record.interviewContent} ?: '暂无内容'">预览内容</div>
+                <div class="record-card-preview" th:text="${record.summary != null ? record.summary : (record.interviewContent != null ? record.interviewContent : '暂无内容')}">预览内容</div>
                 <div class="record-card-actions" onclick="event.stopPropagation();">
                     <a th:href="@{/records/{id}(id=${record.interviewId})}" class="btn btn-small btn-secondary">详情</a>
                     <a th:href="@{/records/{id}/edit(id=${record.interviewId})}" class="btn btn-small btn-primary">编辑</a>
@@ -744,6 +763,18 @@
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+    }
+
+    function toggleSearch() {
+        const extraRow = document.querySelector('.search-row-extra');
+        const btn = document.querySelector('.search-more-btn');
+        if (extraRow.style.display === 'none') {
+            extraRow.style.display = 'flex';
+            btn.textContent = '收起条件 ▲';
+        } else {
+            extraRow.style.display = 'none';
+            btn.textContent = '更多条件 ▼';
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {

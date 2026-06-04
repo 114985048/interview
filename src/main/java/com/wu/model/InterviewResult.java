@@ -7,7 +7,8 @@ public enum InterviewResult {
     PENDING("待结果"),
     PASSED("已通过"),
     FAILED("未通过"),
-    GAVE_UP("已放弃");
+    GAVE_UP("已放弃"),
+    DAI("待面试");
 
     private final String displayName;
 

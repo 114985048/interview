@@ -277,6 +277,17 @@
             outline: none;
             border-color: #11998e;
         }
+        .search-more-btn {
+            color: #11998e;
+            cursor: pointer;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .search-more-btn:hover {
+            background: rgba(17, 153, 142, 0.1);
+        }
         .msg-success {
             background: #d4edda;
             color: #155724;
@@ -588,7 +599,7 @@
         <a th:href="@{/study/new}" class="btn btn-primary">+ 新增学习记录</a>
 
         <form th:action="@{/study}" method="get" th:object="${searchForm}" class="search-form">
-            <div class="form-row">
+            <div class="form-row search-row-main">
                 <label>学习主题:
                     <input type="text" th:field="*{subject}" placeholder="输入学习主题">
                 </label>
@@ -602,6 +613,9 @@
                         <option value="OTHER">其他</option>
                     </select>
                 </label>
+                <label class="search-more-btn" onclick="toggleSearch()">更多条件 ▼</label>
+            </div>
+            <div class="form-row search-row-extra" style="display: none;">
                 <label>难度等级:
                     <select th:field="*{difficulty}">
                         <option value="">全部</option>
@@ -620,8 +634,7 @@
                     </select>
                 </label>
             </div>
-
-            <div class="form-row">
+            <div class="form-row search-row-sort">
                 <label>排序字段:
                     <select th:field="*{sortBy}">
                         <option value="studyDate">学习时间</option>
@@ -755,6 +768,18 @@
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+    }
+
+    function toggleSearch() {
+        const extraRow = document.querySelector('.search-row-extra');
+        const btn = document.querySelector('.search-more-btn');
+        if (extraRow.style.display === 'none') {
+            extraRow.style.display = 'flex';
+            btn.textContent = '收起条件 ▲';
+        } else {
+            extraRow.style.display = 'none';
+            btn.textContent = '更多条件 ▼';
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
